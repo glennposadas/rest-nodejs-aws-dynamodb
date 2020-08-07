@@ -1,0 +1,25 @@
+{
+  "name": "gpnote-api",
+  "version": "1.0.0",
+  "description": "Create, Read, Update, and Delete your own personal notes!",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/outliant/glenn-test-project.git"
+  },
+  "keywords": [
+    "rest",
+    "app",
+    "api",
+    "notes"
+  ],
+  "author": "Glenn Posadas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/outliant/glenn-test-project/issues"
+  },
+  "homepage": "https://github.com/outliant/glenn-test-project#readme"
+}

@@ -26,12 +26,6 @@
    
    router.post('/user/create', userController.createUser);
    
-   fg.sync('./routes/hubspotRoutes/public/*.js', { dot: true }).forEach(
-     (file) => {
-       require(path.resolve(file))(router);
-     }
-   );
-   
    /* ==========================================================================
       Secured API Endpoints
       ========================================================================== */
@@ -43,12 +37,6 @@
    fg.sync('./routes/apiRoutes/*.js', { dot: true }).forEach((file) => {
      require(path.resolve(file))(router);
    });
-   
-   fg.sync('./routes/hubspotRoutes/secured/*.js', { dot: true }).forEach(
-     (file) => {
-       require(path.resolve(file))(router);
-     }
-   );
    
    /* ==========================================================================
       Exports

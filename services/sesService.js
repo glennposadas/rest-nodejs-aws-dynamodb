@@ -105,8 +105,6 @@
           ToAddresses: [emailParams.to_email]
         },
         TemplateData: `{ 
-          \"orgName\":\"${orgName}\",
-          \"teamName\":\"${teamName}\",
           \"roleName\":\"${roleName}\",
           \"email\":\"${emailParams.to_email}\",
           \"senderName\": \"${sender.name}\",

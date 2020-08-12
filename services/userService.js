@@ -5,7 +5,6 @@
    const { uuid } = require('uuidv4');
    const moment = require('moment');
    const dynamoService = require('./dynamoService');
-   const organizationService = require('./organizationService');
    const roleService = require('./roleService');
    const teamService = require('./teamService');
    const s3Service = require('./s3Service');
@@ -24,7 +23,7 @@
    const getUserByEmail = async (email) => {
      const userByEmail = await dynamoService.getItemByParams(
        process.env.USERS_TABLE,
-       'email-organizationId-index',
+       'email-index',
        'email = :email',
        { ':email': email }
      );
@@ -32,17 +31,17 @@
      return userByEmail;
    };
    
-   const aggregateUser = async (orgId, user) => {
+   const aggregateUser = async (user) => {
      let team;
      let role;
      let avatar;
    
      if (user.teamId) {
-       team = teamService.getTeamById(orgId, user.teamId);
+       team = teamService.getTeamById(user.teamId);
      }
    
      if (user.roleId) {
-       role = roleService.getRoleById(orgId, user.roleId);
+       role = roleService.getRoleById(user.roleId);
      }
    
      if (user.avatarKey) {
@@ -77,13 +76,11 @@
       Public Functions
       ========================================================================== */
    
-   const getAllUsers = async (orgId) => {
+   const getAllUsers = async () => {
      try {
        let userItems = await dynamoService.queryWithIndex(
          process.env.USERS_TABLE,
-         'organizationId-email-index',
-         'organizationId = :organizationId',
-         { ':organizationId': orgId }
+         'email-index'
        );
    
        const promises = [];
@@ -114,25 +111,15 @@
    
    const createUser = async (user) => {
      try {
-       const organizationId = user.organizationId;
        const email = user.email;
    
-       const [existingUser, organization] = await Promise.all([
-         getUserByEmail(email),
-         organizationService.getOrganizationById(organizationId)
+       const [existingUser] = await Promise.all([
+         getUserByEmail(email)
        ]);
    
        if (existingUser) {
          return {
            errorMsg: constants.RESPONSE_MESSAGES.EXISTING_PARAMETER(email)
-         };
-       }
-   
-       if (!organization) {
-         return {
-           errorMsg: constants.RESPONSE_MESSAGES.DOES_NOT_EXIST_PARAMETER(
-             constants.DOCUMENT_COLLECTIONS.ORGANIZATION
-           )
          };
        }
    

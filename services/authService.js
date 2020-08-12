@@ -4,7 +4,6 @@
 
    const dynamoService = require('./dynamoService');
    const userService = require('./userService');
-   const organizationService = require('./organizationService');
    const passwordHelper = require('../helpers/passwordHelper');
    const authHelper = require('../helpers/authHelper');
    
@@ -61,25 +60,15 @@
        );
    
        if (passwordHashChallenge === user.password) {
-         const organization = await organizationService.getOrganizationById(
-           user.organizationId
-         );
-   
-         if (!organization) {
-           throw new Error('Organization not found');
-         }
-   
          let avatarSignedUrl;
    
          if (user.avatarKey) {
            avatarSignedUrl = await authHelper.getUserAvatar(user.avatarKey);
          }
-   
-         user.organization = organization;
+
          user.avatar = avatarSignedUrl || null;
    
          delete user.password;
-         delete user.organizationId;
          delete user.avatarKey;
    
          const token = await authHelper.getTokens(user);

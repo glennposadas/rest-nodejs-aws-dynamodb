@@ -25,11 +25,6 @@
    
    const getAccessToken = (payload) => {
      try {
-       // Delete organization config
-       if (payload.organization) {
-         delete payload.organization.config;
-       }
-   
        const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
          expiresIn: process.env.ACCESS_TOKEN_TTL
        });

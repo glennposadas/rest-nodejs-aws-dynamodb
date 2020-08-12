@@ -86,7 +86,7 @@
        const promises = [];
    
        for (const user of userItems) {
-         promises.push(aggregateUser(orgId, user));
+         promises.push(aggregateUser(user));
        }
    
        userItems = await Promise.all(promises);
@@ -101,7 +101,7 @@
      try {
        let user = await dynamoService.getItemById(process.env.USERS_TABLE, userId);
    
-       user = await aggregateUser(user.organizationId, user);
+       user = await aggregateUser(user);
    
        return user;
      } catch (err) {
@@ -143,10 +143,10 @@
      }
    };
    
-   const updateUser = async (orgId, id, userToUpdate) => {
+   const updateUser = async (id, userToUpdate) => {
      try {
        if (userToUpdate.roleId) {
-         const role = await roleService.getRoleById(orgId, userToUpdate.roleId);
+         const role = await roleService.getRoleById(userToUpdate.roleId);
    
          if (!role) {
            return {
@@ -158,7 +158,7 @@
        }
    
        if (userToUpdate.teamId) {
-         const team = await teamService.getTeamById(orgId, userToUpdate.teamId);
+         const team = await teamService.getTeamById(userToUpdate.teamId);
    
          if (!team) {
            return {

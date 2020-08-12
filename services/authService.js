@@ -122,18 +122,6 @@
          throw new Error('Invalid token');
        }
    
-       const organization = await organizationService.getOrganizationById(
-         user.organizationId
-       );
-   
-       if (!organization) {
-         throw new Error('Organization not found');
-       }
-   
-       user.organization = organization;
-   
-       delete user.organizationId;
-   
        const newTokens = await authHelper.getTokens(user, tokenObject.tokenId);
    
        return newTokens;

@@ -7,9 +7,7 @@
   const ses = new aws.SES({ apiVersion: '2010-12-01' });
   const moment = require('moment');
   const elasticSearchService = require('./elasticSearchService');
-  const teamService = require('./teamService');
   const roleService = require('./roleService');
-  const organizationService = require('./organizationService');
   const constants = require('../constants');
   const { createEmailInviteCode } = require('../helpers/passwordHelper');
   const config = require('../config');
@@ -97,8 +95,6 @@
   const sendTemplatedEmail = async (
     emailParams,
     sender,
-    orgName,
-    teamName,
     roleName
   ) => {
     return new Promise((resolve, reject) => {

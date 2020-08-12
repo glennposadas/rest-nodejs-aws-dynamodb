@@ -6,7 +6,6 @@
    const moment = require('moment');
    const dynamoService = require('./dynamoService');
    const roleService = require('./roleService');
-   const teamService = require('./teamService');
    const s3Service = require('./s3Service');
    const uploadService = require('./uploadService');
    const constants = require('../constants');
@@ -32,13 +31,8 @@
    };
    
    const aggregateUser = async (user) => {
-     let team;
      let role;
      let avatar;
-   
-     if (user.teamId) {
-       team = teamService.getTeamById(user.teamId);
-     }
    
      if (user.roleId) {
        role = roleService.getRoleById(user.roleId);
@@ -49,15 +43,8 @@
      }
    
      // Other way to do asynchronous requests
-     team = await team;
      role = await role;
      avatar = await avatar;
-   
-     if (team) {
-       user.team = {
-         name: team.name
-       };
-     }
    
      if (role) {
        user.role = {
@@ -152,18 +139,6 @@
            return {
              errorMsg: constants.RESPONSE_MESSAGES.DOES_NOT_EXIST_PARAMETER(
                constants.ELASTICSEARCH_INDICES.ROLE
-             )
-           };
-         }
-       }
-   
-       if (userToUpdate.teamId) {
-         const team = await teamService.getTeamById(userToUpdate.teamId);
-   
-         if (!team) {
-           return {
-             errorMsg: constants.RESPONSE_MESSAGES.DOES_NOT_EXIST_PARAMETER(
-               constants.ELASTICSEARCH_INDICES.TEAM
              )
            };
          }

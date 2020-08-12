@@ -34,7 +34,6 @@
     "fast-glob": "^3.2.4",
     "http-aws-es": "^6.0.0",
     "http-status-codes": "^1.4.0",
-    "hubspot": "^2.3.13",
     "inquirer": "^7.3.3",
     "jimp": "^0.16.0",
     "joi": "^17.1.1",

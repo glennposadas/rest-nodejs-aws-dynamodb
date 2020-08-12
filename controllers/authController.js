@@ -2,7 +2,7 @@
    Dependencies
    ========================================================================== */
 
-   const joi = require('@hapi/joi');
+   const joi = require('joi');
    const httpStatus = require('http-status-codes');
    const { RESPONSE_MESSAGES } = require('../constants');
    const responseHelper = require('../helpers/responseHelper');

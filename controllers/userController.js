@@ -17,7 +17,7 @@
    
    const getAllUsers = async (req, res) => {
      try {
-       const users = await userService.getAllUsers(req.params.orgId);
+       const users = await userService.getAllUsers();
    
        return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
      } catch (err) {
@@ -28,11 +28,11 @@
    };
    
    const createUser = async (req, res) => {
+     console.log("createUser controller...")
      try {
        const { body } = req;
    
        const schema = joi.object({
-         orgId: joi.string().required().uuid(),
          name: joi.string().required().min(2).max(50),
          email: joi.string().required().email(),
          password: joi.string().required().min(8).max(30),
@@ -77,7 +77,7 @@
        delete body.confirmPassword;
    
        // Add basic user role
-       const userRole = await roleService.getRoleByName(req.body.orgId, 'User');
+       const userRole = await roleService.getRoleByName('User');
    
        req.body.roleId = userRole ? userRole._id : '';
    
@@ -102,9 +102,7 @@
        const user = { ...req.body, ...req.params };
    
        const schema = joi.object({
-         orgId: joi.string().required().uuid(),
          roleId: joi.string().length(20),
-         teamId: joi.string().length(20),
          name: joi.string().min(2).max(50),
          email: joi.string().email(),
          phoneNumber: joi.string().min(2).max(50),
@@ -124,7 +122,6 @@
        const { id, ...rest } = req.body;
    
        const { errorMsg, responseMsg } = await userService.updateUser(
-         req.params.orgId,
          req.user.id,
          rest
        );

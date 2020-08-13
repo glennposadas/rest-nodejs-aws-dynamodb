@@ -18,7 +18,7 @@
       Public Functions
       ========================================================================== */
    
-   const getAllProjectFiles = async (orgId, projId, query) => {
+   const getAllProjectFiles = async (query) => {
      try {
        const fileParams = elasticSearchService.buildGetDocParameters(query, {
          index: INDEX_NAME,
@@ -26,20 +26,7 @@
            query: {
              bool: {
                must: [
-                 {
-                   term: {
-                     organization_id: {
-                       value: orgId
-                     }
-                   }
-                 },
-                 {
-                   term: {
-                     project_id: {
-                       value: projId
-                     }
-                   }
-                 }
+
                ]
              }
            }
@@ -54,18 +41,11 @@
      }
    };
    
-   const getAllTaskFiles = async (orgId, taskId) => {
+   const getAllTaskFiles = async (taskId) => {
      try {
        const files = await elasticSearchService.getDocumentsByQuery(INDEX_NAME, {
          bool: {
            must: [
-             {
-               term: {
-                 organization_id: {
-                   value: orgId
-                 }
-               }
-             },
              {
                term: {
                  task_id: {
@@ -83,18 +63,11 @@
      }
    };
    
-   const getAllCommentFiles = async (orgId, commentId) => {
+   const getAllCommentFiles = async (commentId) => {
      try {
        const files = await elasticSearchService.getDocumentsByQuery(INDEX_NAME, {
          bool: {
            must: [
-             {
-               term: {
-                 organization_id: {
-                   value: orgId
-                 }
-               }
-             },
              {
                term: {
                  comment_id: {
@@ -112,7 +85,7 @@
      }
    };
    
-   const getFileById = async (orgId, fileId) => {
+   const getFileById = async (fileId) => {
      try {
        const fileById = await elasticSearchService.getDocumentsByQuery(
          INDEX_NAME,
@@ -123,13 +96,6 @@
                  term: {
                    _id: {
                      value: fileId
-                   }
-                 }
-               },
-               {
-                 term: {
-                   organization_id: {
-                     value: orgId
                    }
                  }
                }
@@ -237,24 +203,10 @@
    
    const getFilesWithName = async (params) => {
      try {
-       const { organizationId, projectId, name, type } = params;
+       const { name, type } = params;
        const files = await elasticSearchService.getDocumentsByQuery(INDEX_NAME, {
          bool: {
            must: [
-             {
-               term: {
-                 organization_id: {
-                   value: organizationId
-                 }
-               }
-             },
-             {
-               term: {
-                 project_id: {
-                   value: projectId
-                 }
-               }
-             },
              {
                term: {
                  name: {
@@ -279,10 +231,9 @@
      }
    };
    
-   const validateFileObject = async (orgId, projId, body) => {
+   const validateFileObject = async (body) => {
      const { name, path, type } = body;
-     const rootFolder = `${orgId}/${projId}`;
-     const parentPath = rootFolder + path;
+     const parentPath = path;
      const objectType = type || 'folder';
    
      if (path !== '/') {
@@ -297,8 +248,6 @@
    
      const sameNameFiles = await getFilesWithName({
        name,
-       organizationId: orgId,
-       projectId: projId,
        type: objectType
      });
    

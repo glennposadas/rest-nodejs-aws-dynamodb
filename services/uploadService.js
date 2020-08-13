@@ -13,12 +13,11 @@
        Public Functions
        ========================================================================== */
    
-   const uploadProjectFile = async (orgId, projId, fileParam) => {
+   const uploadProjectFile = async (projId, fileParam) => {
      try {
        const { name, path, type, data, size, task_id, comment_id } = fileParam;
-       const rootFolder = `${orgId}/${projId}`;
        const s3_name = fileHelper.getRandomFileName(name);
-       const fileKey = `${rootFolder}${path}${s3_name}`;
+       const fileKey = `${path}${s3_name}`;
        const fileBuffer = Buffer.from(data, 'base64');
        const dateTime = moment().valueOf();
    
@@ -37,8 +36,6 @@
          s3_name,
          type,
          size,
-         organization_id: orgId,
-         project_id: projId,
          key: fileKey,
          task_id: task_id || null,
          comment_id: comment_id || null,
@@ -57,8 +54,7 @@
      try {
        const { name, path, task_id, task_folder } = folderParam;
        const s3_name = task_folder ? task_id : fileHelper.getRandomFolderName();
-       const rootFolder = `${orgId}/${projId}`;
-       const folderKey = `${rootFolder}${path}${s3_name}/`;
+       const folderKey = `${path}${s3_name}/`;
        const dateTime = moment().valueOf();
    
        await s3Service.createFolder(folderKey);
@@ -68,7 +64,6 @@
          s3_name,
          type: 'folder',
          size: 0,
-         organization_id: orgId,
          project_id: projId,
          key: folderKey,
          task_id: task_id || null,

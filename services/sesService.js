@@ -34,7 +34,7 @@
      Private Functions
      ========================================================================== */
   
-  const getEmailInvite = async (orgId, fromEmail, toEmail) => {
+  const getEmailInvite = async (fromEmail, toEmail) => {
     try {
       const emailInvite = await elasticSearchService.getDocumentsByQuery(
         INDEX_NAME,
@@ -52,13 +52,6 @@
                 term: {
                   to_email: {
                     value: toEmail
-                  }
-                }
-              },
-              {
-                term: {
-                  organization_id: {
-                    value: orgId
                   }
                 }
               }
@@ -124,12 +117,11 @@
      Public Functions
      ========================================================================== */
   
-  const sendInvitationEmail = async (orgId, user, params) => {
+  const sendInvitationEmail = async (user, params) => {
     try {
       const fromEmail = user.email;
       const fromName = user.name;
       const toEmail = params.email;
-      const teamId = params.team_id;
       const roleId = params.role_id;
   
       if (!fromEmail || !toEmail || !fromName) {
@@ -137,15 +129,7 @@
           errorMsg: 'Required data is missing'
         };
       }
-  
-      const organization = await organizationService.getOrganizationById(orgId);
-  
-      if (!organization) {
-        return {
-          errorMsg: 'Organization not found'
-        };
-      }
-  
+
       const existingUser = await userService.getUserByEmail(toEmail);
   
       if (existingUser) {
@@ -154,15 +138,7 @@
         };
       }
   
-      const team = await teamService.getTeamById(orgId, teamId);
-  
-      if (!team) {
-        return {
-          errorMsg: 'Team not found'
-        };
-      }
-  
-      const role = await roleService.getRoleById(orgId, roleId);
+      const role = await roleService.getRoleById(roleId);
   
       if (!role) {
         return {
@@ -170,7 +146,7 @@
         };
       }
   
-      const emailInvite = await getEmailInvite(orgId, fromEmail, toEmail);
+      const emailInvite = await getEmailInvite(fromEmail, toEmail);
       const dateNow = new Date().getTime();
   
       // Send email right away if there's no ES record of
@@ -194,14 +170,12 @@
   
       const emailExpiresIn = dateNow + config.emailExpiresIn;
       const emailInviteParams = {
-        organization_id: orgId,
         from_email: fromEmail,
         to_email: toEmail,
         status: 'pending',
         expires_in: emailExpiresIn,
         last_invite_sent: dateNow,
         invite_code: createEmailInviteCode(
-          organization.name,
           fromEmail,
           toEmail,
           emailExpiresIn
@@ -216,8 +190,6 @@
       await sendTemplatedEmail(
         emailInviteParams,
         user,
-        organization.name,
-        team.name,
         role.name
       );
   

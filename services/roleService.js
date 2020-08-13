@@ -16,17 +16,13 @@ const INDEX_NAME = constants.ELASTICSEARCH_INDICES.ROLE;
     Public Functions
     ========================================================================== */
 
-const getAllRoles = async (orgId, query) => {
+const getAllRoles = async (query) => {
   try {
     const roleParams = elasticSearchService.buildGetDocParameters(query, {
       index: INDEX_NAME,
       body: {
         query: {
-          term: {
-            organization_id: {
-              value: orgId
-            }
-          }
+
         }
       }
     });
@@ -39,7 +35,7 @@ const getAllRoles = async (orgId, query) => {
   }
 };
 
-const getRoleById = async (orgId, roleId) => {
+const getRoleById = async (roleId) => {
   try {
     const roleById = await elasticSearchService.getDocumentsByQuery(
       INDEX_NAME,
@@ -50,13 +46,6 @@ const getRoleById = async (orgId, roleId) => {
               term: {
                 _id: {
                   value: roleId
-                }
-              }
-            },
-            {
-              term: {
-                organization_id: {
-                  value: orgId
                 }
               }
             }
@@ -71,7 +60,7 @@ const getRoleById = async (orgId, roleId) => {
   }
 };
 
-const getRoleByName = async (orgId, name) => {
+const getRoleByName = async (name) => {
   try {
     const roleByName = await elasticSearchService.getDocumentsByQuery(
       INDEX_NAME,
@@ -82,13 +71,6 @@ const getRoleByName = async (orgId, name) => {
               term: {
                 name: {
                   value: name
-                }
-              }
-            },
-            {
-              term: {
-                organization_id: {
-                  value: orgId
                 }
               }
             }
@@ -130,9 +112,9 @@ const updateRole = async (id, updatedRole) => {
   }
 };
 
-const deleteRole = async (id, orgId) => {
+const deleteRole = async (id) => {
   try {
-    const roleById = await getRoleById(id, orgId);
+    const roleById = await getRoleById(id);
 
     if (!roleById) {
       return {

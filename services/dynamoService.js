@@ -12,6 +12,7 @@
    
    aws.config.update({
      region: process.env.REGION,
+    //  endppint: "http://localhost:8000"
      accessKeyId: process.env.ACCESS_KEY,
      secretAccessKey: process.env.SECRET_KEY
    });
@@ -25,7 +26,7 @@
    /* ==========================================================================
       Public Functions
       ========================================================================== */
-   
+
    const addTableItem = async (tableName, item) => {
      try {
        const docParams = {

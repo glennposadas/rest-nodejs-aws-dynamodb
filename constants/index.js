@@ -54,6 +54,7 @@
     INVALID_CREDENTIALS: 'Invalid credentials',
     INVALID_PAYLOAD: 'Invalid payload',
     LOGIN_SUCCESSFUL: 'Login Successful!',
+    REGISTER_SUCCESSFUL: 'Register Successful!',
     LOGOUT_SUCCESSFUL: 'Logout Successful!',
     SERVER_ERROR: 'Something went wrong!',
   };

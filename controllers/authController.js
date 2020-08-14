@@ -44,10 +44,14 @@
             responseHelper.SUCCESS(RESPONSE_MESSAGES.LOGIN_SUCCESSFUL, registerData)
           );
       }
+
+      console.log("Error auth controller, bad reqeuest, invalid credentials, ", error)
       return res
         .status(httpStatus.BAD_REQUEST)
         .json(responseHelper.BAD_REQUEST(RESPONSE_MESSAGES.INVALID_CREDENTIALS));
     } catch (err) {
+      console.log("Error auth controller: ", err)
+
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR)
         .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));

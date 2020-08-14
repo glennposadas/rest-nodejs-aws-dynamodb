@@ -46,57 +46,11 @@
       Public Functions
       ========================================================================== */
 
-  const register = async (email, password, fullname) => {
-    try {
-      const items = await dynamoService.scanTable(
-        process.env.AUTHORS_TABLE,
-        false
-      );
-
-      return items;
-    } catch (err) {
-      console.error(err);
-      throw new Error(err.message);
-    }
-
-    // try {
-    //   const user = await userService.getUserByEmail(email);
-
-    //   if (user) {
-    //     throw new Error('User already exists!');
-    //   }
-
-    //   const passwordHashChallenge = passwordHelper.createPasswordHash(
-    //     user.id,
-    //     password
-    //   );
-
-    //   if (passwordHashChallenge === user.password) {
-    //     let avatarSignedUrl;
-
-    //     if (user.avatarKey) {
-    //       avatarSignedUrl = await authHelper.getUserAvatar(user.avatarKey);
-    //     }
-
-    //     user.avatar = avatarSignedUrl || null;
-
-    //     delete user.password;
-    //     delete user.avatarKey;
-
-    //     const token = await authHelper.getTokens(user);
-
-    //     return {
-    //       token,
-    //       user
-    //     };
-    //   }
-
-    //   throw new Error('Incorrect password');
-    // } catch (err) {
-    //   return null;
-    // }
-  };
-
+  /**
+   * Login function. For signing up, see userController.createUser.
+   * @param {*} email 
+   * @param {*} password 
+   */
   const login = async (email, password) => {
     try {
       const user = await userService.getUserByEmail(email);
@@ -186,7 +140,6 @@
       ========================================================================== */
 
   module.exports = {
-    register,
     login,
     logout,
     refreshToken

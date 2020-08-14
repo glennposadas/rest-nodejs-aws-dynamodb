@@ -42,11 +42,7 @@
            .equal(joi.ref('password'))
            .messages({
              'any.only': 'Password does not match'
-           }),
-         isInvite: joi.boolean(),
-         code: joi.string().when('isInvite', {
-           switch: [{ is: true, then: joi.required() }]
-         })
+           })
        });
    
        const { error } = schema.validate(body);
@@ -57,23 +53,7 @@
            .json(responseHelper.BAD_REQUEST(error.details[0].message));
        }
    
-       // Check if register came from invitation
-       if (body.isInvite) {
-         const { inviteErrorMsg } = await sesService.acceptInvitationEmail(
-           body.code,
-           body.email
-         );
-   
-         if (inviteErrorMsg) {
-           return res
-             .status(httpStatus.BAD_REQUEST)
-             .json(responseHelper.BAD_REQUEST(inviteErrorMsg));
-         }
-       }
-   
        // Remove unnecessary password field
-       delete body.isInvite;
-       delete body.code;
        delete body.confirmPassword;
    
        // Add basic user role

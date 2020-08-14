@@ -12,11 +12,11 @@
    
    aws.config.update({
      region: process.env.REGION,
-    //  endppint: "http://localhost:8000"
-     accessKeyId: process.env.ACCESS_KEY,
-     secretAccessKey: process.env.SECRET_KEY
+     endppint: "http://localhost:8000"
+    //  accessKeyId: process.env.ACCESS_KEY,
+    //  secretAccessKey: process.env.SECRET_KEY
    });
-   
+
    /* ==========================================================================
       Variables
       ========================================================================== */

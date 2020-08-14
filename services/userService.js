@@ -5,12 +5,8 @@
    const { uuid } = require('uuidv4');
    const moment = require('moment');
    const dynamoService = require('./dynamoService');
-   const roleService = require('./roleService');
-   const s3Service = require('./s3Service');
-   const uploadService = require('./uploadService');
    const constants = require('../constants');
    const passwordHelper = require('../helpers/passwordHelper');
-   const imageHelper = require('../helpers/imageHelper');
    const authHelper = require('../helpers/authHelper');
    
    require('dotenv').config();
@@ -28,35 +24,6 @@
      );
    
      return userByEmail;
-   };
-   
-   const aggregateUser = async (user) => {
-     let role;
-     let avatar;
-   
-     if (user.roleId) {
-       role = roleService.getRoleById(user.roleId);
-     }
-   
-     if (user.avatarKey) {
-       avatar = authHelper.getUserAvatar(user.avatarKey);
-     }
-   
-     // Other way to do asynchronous requests
-     role = await role;
-     avatar = await avatar;
-   
-     if (role) {
-       user.role = {
-         name: role.name
-       };
-     }
-   
-     if (avatar) {
-       user.avatar = avatar;
-     }
-   
-     return user;
    };
    
    /* ==========================================================================
@@ -132,18 +99,6 @@
    
    const updateUser = async (id, userToUpdate) => {
      try {
-       if (userToUpdate.roleId) {
-         const role = await roleService.getRoleById(userToUpdate.roleId);
-   
-         if (!role) {
-           return {
-             errorMsg: constants.RESPONSE_MESSAGES.DOES_NOT_EXIST_PARAMETER(
-               constants.ELASTICSEARCH_INDICES.ROLE
-             )
-           };
-         }
-       }
-   
        const responseMsg = await dynamoService.updateTableItem(
          process.env.USERS_TABLE,
          id,
@@ -199,51 +154,6 @@
      }
    };
    
-   const changeUserAvatar = async (userId, { data }) => {
-     try {
-       const user = await getUserById(userId);
-   
-       if (!user) {
-         return {
-           errorMsg: 'User does not exist'
-         };
-       }
-   
-       const key = `avatar/${userId}-${moment().valueOf()}.png`;
-   
-       if (user.avatarKey) {
-         await s3Service.deleteObject({
-           Bucket: process.env.S3_FILE_STORAGE,
-           Key: user.avatarKey
-         });
-       }
-   
-       const { buffer: avatarBuffer, mime } = await imageHelper.formatAvatar(
-         Buffer.from(data, 'base64')
-       );
-   
-       await Promise.all([
-         s3Service.putObject({
-           Bucket: process.env.S3_FILE_STORAGE,
-           Key: key,
-           Body: avatarBuffer,
-           ContentType: mime,
-           ContentEncoding: 'base64'
-         }),
-         dynamoService.updateTableItem(process.env.USERS_TABLE, userId, {
-           avatarKey: key
-         })
-       ]);
-   
-       // Get new avatar presigned Url
-       const signedUrl = await uploadService.generatePresignedUrl(key);
-   
-       return signedUrl;
-     } catch (err) {
-       throw new Error(err.message);
-     }
-   };
-   
    /* ==========================================================================
        Exports
        ========================================================================== */
@@ -254,7 +164,6 @@
      getUserById,
      createUser,
      updateUser,
-     changeUserPassword,
-     changeUserAvatar
+     changeUserPassword
    };
    

@@ -18,14 +18,13 @@
   
   const USER_FIELDS = {
     ID: 'id',
-    FIRSTNAME: 'firstName',
-    LASTNAME: 'lastName',
+    NAME: 'name',
     EMAIL: 'email',
     PASSWORD: 'password',
   };
   
   const NOTE_FIELDS = {
-    TITLE: 'name',
+    TITLE: 'title',
     CONTENT: 'content',
     USER_ID: 'user_id',
     CREATED_AT: 'created_at',
@@ -33,12 +32,8 @@
   };
   
   const DOCUMENT_COLLECTIONS = {
-    USER: 'User',
-    Note: 'Note'
-  };
-  
-  const ELASTICSEARCH_INDICES = {
-    NOTE: 'note'
+    AUTHOR: 'Authors',
+    NOTE: 'Notes'
   };
   
   const RESPONSE_MESSAGES = {
@@ -69,7 +64,6 @@
     RESPONSE_MESSAGES,
     USER_FIELDS,
     NOTE_FIELDS,
-    DOCUMENT_COLLECTIONS,
-    ELASTICSEARCH_INDICES,
+    DOCUMENT_COLLECTIONS
   };
   

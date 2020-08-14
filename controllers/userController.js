@@ -6,8 +6,6 @@
    const joi = require('joi');
    const userService = require('../services/userService');
    const authHelper = require('../helpers/authHelper');
-   const roleService = require('../services/roleService');
-   const sesService = require('../services/sesService');
    const { RESPONSE_MESSAGES } = require('../constants');
    const responseHelper = require('../helpers/responseHelper');
    
@@ -56,11 +54,6 @@
        // Remove unnecessary password field
        delete body.confirmPassword;
    
-       // Add basic user role
-       const userRole = await roleService.getRoleByName('User');
-   
-       req.body.roleId = userRole ? userRole._id : '';
-   
        const { errorMsg, responseMsg } = await userService.createUser(req.body);
    
        if (errorMsg) {
@@ -82,7 +75,6 @@
        const user = { ...req.body, ...req.params };
    
        const schema = joi.object({
-         roleId: joi.string().length(20),
          name: joi.string().min(2).max(50),
          email: joi.string().email(),
          phoneNumber: joi.string().min(2).max(50),
@@ -166,63 +158,6 @@
      }
    };
    
-   const changeUserAvatar = async (req, res) => {
-     try {
-       const { body } = req;
-   
-       const schema = joi.object({
-         name: joi.string().required(),
-         type: joi.string().valid('image/png', 'image/jpeg').required(),
-         size: joi
-           .number()
-           .max(1024 * 1024 * 5) // 5MB
-           .required(),
-         data: joi.string().base64().required()
-       });
-   
-       const { error } = schema.validate(body);
-   
-       if (error) {
-         return res
-           .status(httpStatus.BAD_REQUEST)
-           .json(responseHelper.BAD_REQUEST(error.details[0].message));
-       }
-   
-       const avatarSignedUrl = await userService.changeUserAvatar(
-         req.user.id,
-         body
-       );
-   
-       return res
-         .status(httpStatus.OK)
-         .json(responseHelper.SUCCESS(null, avatarSignedUrl));
-     } catch (err) {
-       return res
-         .status(httpStatus.INTERNAL_SERVER_ERROR)
-         .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
-     }
-   };
-   
-   const getUserAvatar = async (req, res) => {
-     try {
-       const user = await userService.getUserById(req.user.id);
-   
-       if (!user) {
-         throw new Error('User not found');
-       }
-   
-       const avatarSignedUrl = await authHelper.getUserAvatar(user.avatarKey);
-   
-       return res
-         .status(httpStatus.OK)
-         .json(responseHelper.SUCCESS(null, avatarSignedUrl));
-     } catch (err) {
-       return res
-         .status(httpStatus.INTERNAL_SERVER_ERROR)
-         .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
-     }
-   };
-   
    /* ==========================================================================
       Exports
       ========================================================================== */
@@ -231,8 +166,6 @@
      getAllUsers,
      createUser,
      updateUser,
-     changeUserPassword,
-     changeUserAvatar,
-     getUserAvatar
+     changeUserPassword
    };
    

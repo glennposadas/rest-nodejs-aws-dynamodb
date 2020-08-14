@@ -65,16 +65,7 @@
       );
 
       if (passwordHashChallenge === user.password) {
-        let avatarSignedUrl;
-
-        if (user.avatarKey) {
-          avatarSignedUrl = await authHelper.getUserAvatar(user.avatarKey);
-        }
-
-        user.avatar = avatarSignedUrl || null;
-
-        delete user.password;
-        delete user.avatarKey;
+        delete user.password;;
 
         const token = await authHelper.getTokens(user);
 

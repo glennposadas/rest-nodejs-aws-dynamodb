@@ -5,7 +5,6 @@
    const moment = require('moment');
    const jwt = require('jsonwebtoken');
    const { uuid } = require('uuidv4');
-   const uploadService = require('../services/uploadService');
    const dynamoService = require('../services/dynamoService');
    
    /* ==========================================================================
@@ -76,16 +75,6 @@
      }
    };
    
-   const getUserAvatar = async (key) => {
-     try {
-       const url = await uploadService.generatePresignedUrl(key);
-   
-       return url;
-     } catch (error) {
-       return null;
-     }
-   };
-   
    /* ==========================================================================
       Exports
       ========================================================================== */
@@ -94,7 +83,6 @@
      decodeToken,
      getTokens,
      getAccessToken,
-     getRefreshToken,
-     getUserAvatar
+     getRefreshToken
    };
    

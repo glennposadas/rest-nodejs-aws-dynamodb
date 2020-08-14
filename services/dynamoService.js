@@ -12,7 +12,7 @@
    
    aws.config.update({
      region: process.env.REGION,
-     endppint: "http://localhost:8000"
+     endpoint: "http://localhost:8000"
     //  accessKeyId: process.env.ACCESS_KEY,
     //  secretAccessKey: process.env.SECRET_KEY
    });
@@ -40,7 +40,7 @@
          `[Table ${tableName} Item] ${item}`
        );
      } catch (err) {
-       console.error(err);
+      console.log('DynamoService error: ' + err + ' tableName ' + tableName + ' and Item: ' + item)
        throw new Error('[Dynamo Service] addTableItem error.');
      }
    };
@@ -161,6 +161,7 @@
    
        return result.Items[0] || null;
      } catch (error) {
+       console.log('Dynamo Service: [Dynamo Service] getItemByParams error. Params: ' + params + ' and error: ' + error)
        throw new Error('[Dynamo Service] getItemByParams error.');
      }
    };

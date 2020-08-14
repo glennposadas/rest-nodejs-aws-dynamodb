@@ -46,6 +46,7 @@
        const { error } = schema.validate(body);
    
        if (error) {
+         console.log("Error create user controller ", error)
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(error.details[0].message));
@@ -57,6 +58,7 @@
        const { errorMsg, responseMsg } = await userService.createUser(req.body);
    
        if (errorMsg) {
+         console.log("Error create user controller message: ", errorMsg)
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(errorMsg));
@@ -64,6 +66,7 @@
    
        return res.status(httpStatus.OK).json(responseHelper.SUCCESS(responseMsg));
      } catch (err) {
+       console.log("Error create user controller catched: ", err)
        return res
          .status(httpStatus.INTERNAL_SERVER_ERROR)
          .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
@@ -76,11 +79,7 @@
    
        const schema = joi.object({
          name: joi.string().min(2).max(50),
-         email: joi.string().email(),
-         phoneNumber: joi.string().min(2).max(50),
-         city: joi.string().min(2).max(50),
-         state: joi.string().min(2).max(50),
-         company: joi.string().min(2).max(50)
+         email: joi.string().email()
        });
    
        const { error } = schema.validate(user);

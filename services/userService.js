@@ -17,7 +17,7 @@
    
    const getUserByEmail = async (email) => {
      const userByEmail = await dynamoService.getItemByParams(
-       process.env.USERS_TABLE,
+       process.env.AUTHORS_TABLE,
        'email-index',
        'email = :email',
        { ':email': email }
@@ -33,7 +33,7 @@
    const getAllUsers = async () => {
      try {
        let userItems = await dynamoService.queryWithIndex(
-         process.env.USERS_TABLE,
+         process.env.AUTHORS_TABLE,
          'email-index'
        );
    
@@ -53,7 +53,7 @@
    
    const getUserById = async (userId) => {
      try {
-       let user = await dynamoService.getItemById(process.env.USERS_TABLE, userId);
+       let user = await dynamoService.getItemById(process.env.AUTHORS_TABLE, userId);
    
        user = await aggregateUser(user);
    
@@ -84,8 +84,10 @@
        // Hash password
        user.password = passwordHelper.createPasswordHash(id, user.password);
    
+       console.log('UserService: createUser to table ' + process.env.AUTHORS_TABLE + ' with user object: ' + JSON.stringify(user))
+
        const responseMsg = await dynamoService.addTableItem(
-         process.env.USERS_TABLE,
+         process.env.AUTHORS_TABLE,
          user
        );
    
@@ -93,6 +95,7 @@
          responseMsg
        };
      } catch (err) {
+       console.log('User service createUser error: ', err)
        throw new Error(err.message);
      }
    };
@@ -100,7 +103,7 @@
    const updateUser = async (id, userToUpdate) => {
      try {
        const responseMsg = await dynamoService.updateTableItem(
-         process.env.USERS_TABLE,
+         process.env.AUTHORS_TABLE,
          id,
          userToUpdate
        );
@@ -142,7 +145,7 @@
          newPassword
        );
    
-       await dynamoService.updateTableItem(process.env.USERS_TABLE, userId, {
+       await dynamoService.updateTableItem(process.env.AUTHORS_TABLE, userId, {
          password: passwordUpdate
        });
    

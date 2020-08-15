@@ -3,7 +3,6 @@
    ========================================================================== */
 
    const { v4: uuidv4 } = require('uuid');
-   const moment = require('moment');
    const dynamoService = require('./dynamoService');
    const constants = require('../constants');
    const passwordHelper = require('../helpers/passwordHelper');
@@ -25,6 +24,47 @@
    
      return userByEmail;
    };
+
+   const aggregateUser = async (orgId, user) => {
+    let team;
+    let role;
+    let avatar;
+  
+    if (user.teamId) {
+      team = teamService.getTeamById(orgId, user.teamId);
+    }
+  
+    if (user.roleId) {
+      role = roleService.getRoleById(orgId, user.roleId);
+    }
+  
+    if (user.avatarKey) {
+      avatar = authHelper.getUserAvatar(user.avatarKey);
+    }
+  
+    // Other way to do asynchronous requests
+    team = await team;
+    role = await role;
+    avatar = await avatar;
+  
+    if (team) {
+      user.team = {
+        name: team.name
+      };
+    }
+  
+    if (role) {
+      user.role = {
+        name: role.name
+      };
+    }
+  
+    if (avatar) {
+      user.avatar = avatar;
+    }
+  
+    return user;
+  };
    
    /* ==========================================================================
       Public Functions

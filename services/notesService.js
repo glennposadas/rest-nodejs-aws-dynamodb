@@ -5,7 +5,6 @@
    const { v4: uuidv4 } = require('uuid');
    const dynamoService = require('./dynamoService');
    const constants = require('../constants');
-   const passwordHelper = require('../helpers/passwordHelper');
    
    require('dotenv').config();
    
@@ -28,16 +27,16 @@
       Public Functions
       ========================================================================== */
    
-   const getAllUsers = async () => {
+   const getAllNotes = async () => {
      try {
-       let userItems = await dynamoService.queryWithIndex(
-         process.env.AUTHORS_TABLE,
-         'email-index'
+       let notes = await dynamoService.queryWithIndex(
+         process.env.NOTES_TABLE,
+         'title-index'
        );
    
        const promises = [];
    
-       for (const user of userItems) {
+       for (const user of notes) {
          promises.push(aggregateUser(user));
        }
    
@@ -161,7 +160,6 @@
    
    module.exports = {
      getUserByEmail,
-     getAllUsers,
      getUserById,
      createUser,
      updateUser,

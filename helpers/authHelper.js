@@ -36,7 +36,7 @@
    
    const getRefreshToken = async (payload, tokenId = null) => {
      try {
-       const id = tokenId || uuid();
+       const id = tokenId || uuid.v4();
        const token = jwt.sign(
          {
            ...payload,

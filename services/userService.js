@@ -77,14 +77,14 @@
          };
        }
    
-       const id = uuid();
+       const id = uuid.v4();
    
        user.id = id;
    
        // Hash password
        user.password = passwordHelper.createPasswordHash(id, user.password);
    
-       console.log('UserService: createUser to table ' + process.env.AUTHORS_TABLE + ' with user object: ' + JSON.stringify(user))
+       console.log('UserService: createUser to table ' + process.env.AUTHORS_TABLE + ' with user object: ' + JSON.stringify)
 
        const responseMsg = await dynamoService.addTableItem(
          process.env.AUTHORS_TABLE,

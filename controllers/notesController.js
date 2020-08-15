@@ -4,8 +4,7 @@
 
    const httpStatus = require('http-status-codes');
    const joi = require('joi');
-   const userService = require('../services/userService');
-
+   const notesService = require('../services/notesService');
    const { RESPONSE_MESSAGES } = require('../constants');
    const responseHelper = require('../helpers/responseHelper');
    
@@ -13,9 +12,9 @@
       Public Functions
       ========================================================================== */
    
-   const getAllUsers = async (req, res) => {
+   const getAllNotes = async (req, res) => {
      try {
-       const users = await userService.getAllUsers();
+       const users = await notesService.getAllNotes();
    
        return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
      } catch (err) {

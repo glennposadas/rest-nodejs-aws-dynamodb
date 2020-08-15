@@ -3,26 +3,26 @@
    ========================================================================== */
 
    const userController = require('../../controllers/userController');
-   const permission = require('../middlewares/permission');
+   //const permission = require('../middlewares/permission');
    
    /* ==========================================================================
        Exports
        ========================================================================== */
    
    module.exports = (router) => {
+     console.log('User.js ' + router);
      router.get(
-       '/:orgId/user/all',
-       permission('admin'),
+       '/user/all',
        userController.getAllUsers
      );
      router.put(
-       '/:orgId/user/update',
-       permission('user'),
+       '/user/update',
+      //  permission('user'),
        userController.updateUser
      );
      router.put(
-       '/:orgId/user/password/change',
-       permission('user'),
+       '/user/password/change',
+      //  permission('user'),
        userController.changeUserPassword
      );
    };

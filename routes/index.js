@@ -36,7 +36,9 @@
    router.use(authMiddleware);
    
    fg.sync('./routes/apiRoutes/*.js', { dot: true }).forEach((file) => {
-     require(path.resolve(file))(router);
+      const resolvedFile = path.resolve(file);
+      console.log('Using route: ' + resolvedFile);
+     require(resolvedFile)(router);
    });
    
    /* ==========================================================================

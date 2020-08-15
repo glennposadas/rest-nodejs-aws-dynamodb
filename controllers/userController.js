@@ -14,6 +14,7 @@
       ========================================================================== */
    
    const getAllUsers = async (req, res) => {
+     console.log('UserController: getAllUsers');
      try {
        const users = await userService.getAllUsers();
    

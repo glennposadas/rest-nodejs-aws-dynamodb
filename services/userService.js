@@ -38,6 +38,7 @@
 
        return userItems;
      } catch (err) {
+       console.log('User Service getAllUsers error: ' + err);
        throw new Error(err.message);
      }
    };

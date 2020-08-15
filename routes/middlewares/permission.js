@@ -12,6 +12,7 @@
    
    const requireMinAccessLevel = (accessLevel) => {
      return async (req, res, next) => {
+       console.log('require min access level...');
        try {
          const { role } = req.user;
    

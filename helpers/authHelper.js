@@ -71,6 +71,7 @@
          refreshToken
        };
      } catch (err) {
+       console.log('authHelper error: ' + err)
        throw new Error(err.message);
      }
    };

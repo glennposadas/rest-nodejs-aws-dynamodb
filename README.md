@@ -21,22 +21,6 @@
 
 <hr>
 
-## Elastic Search service script
-1. `npm run esservice`
-
-### Adding an Index
-1. Input Index name {mappingName_v1}
-2. Input Index alias name {mappingName}
-
-### Deleting an Index
-1. Input Index name {mappingName_v1}
-
-### Resetting indices
-This will delete and re-add all mappings under
-./scripts/ElasticSearch/mappings/
-
-<hr>
-
 ##  API Documentation
 
 Run the app and go to localhost:3000

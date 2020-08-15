@@ -24,47 +24,6 @@
    
      return userByEmail;
    };
-
-   const aggregateUser = async (orgId, user) => {
-    let team;
-    let role;
-    let avatar;
-  
-    if (user.teamId) {
-      team = teamService.getTeamById(orgId, user.teamId);
-    }
-  
-    if (user.roleId) {
-      role = roleService.getRoleById(orgId, user.roleId);
-    }
-  
-    if (user.avatarKey) {
-      avatar = authHelper.getUserAvatar(user.avatarKey);
-    }
-  
-    // Other way to do asynchronous requests
-    team = await team;
-    role = await role;
-    avatar = await avatar;
-  
-    if (team) {
-      user.team = {
-        name: team.name
-      };
-    }
-  
-    if (role) {
-      user.role = {
-        name: role.name
-      };
-    }
-  
-    if (avatar) {
-      user.avatar = avatar;
-    }
-  
-    return user;
-  };
    
    /* ==========================================================================
       Public Functions
@@ -76,15 +35,7 @@
          process.env.AUTHORS_TABLE,
          'email-index'
        );
-   
-       const promises = [];
-   
-       for (const user of userItems) {
-         promises.push(aggregateUser(user));
-       }
-   
-       userItems = await Promise.all(promises);
-   
+
        return userItems;
      } catch (err) {
        throw new Error(err.message);
@@ -94,9 +45,7 @@
    const getUserById = async (userId) => {
      try {
        let user = await dynamoService.getItemById(process.env.AUTHORS_TABLE, userId);
-   
-       user = await aggregateUser(user);
-   
+       
        return user;
      } catch (err) {
        throw new Error(err.message);

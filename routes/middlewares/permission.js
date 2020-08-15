@@ -4,7 +4,6 @@
 
    const httpStatus = require('http-status-codes');
    const responseHelper = require('../../helpers/responseHelper');
-   const roleService = require('../../services/roleService');
    const { RESPONSE_MESSAGES } = require('../../constants');
    
    /* ==========================================================================
@@ -15,7 +14,6 @@
      return async (req, res, next) => {
        try {
          const { roleId } = req.user;
-         const organizationId = req.user.organization.id;
    
          if (!organizationId || !roleId) {
            return res

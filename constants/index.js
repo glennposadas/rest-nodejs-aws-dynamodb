@@ -21,6 +21,7 @@
     NAME: 'name',
     EMAIL: 'email',
     PASSWORD: 'password',
+    ROLE: 'role'
   };
   
   const NOTE_FIELDS = {

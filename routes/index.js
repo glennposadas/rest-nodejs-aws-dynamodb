@@ -25,6 +25,7 @@
    router.post('/refresh/token', authController.refreshToken);
 
    router.post('/user/create', userController.createUser);
+
    
    /* ==========================================================================
       Secured API Endpoints

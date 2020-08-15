@@ -45,7 +45,7 @@
    const getUserById = async (userId) => {
      try {
        let user = await dynamoService.getItemById(process.env.AUTHORS_TABLE, userId);
-       
+
        return user;
      } catch (err) {
        throw new Error(err.message);
@@ -67,8 +67,9 @@
        }
    
        const id = uuidv4();
-   
+       user.role = "author";
        user.id = id;
+
    
        // Hash password
        user.password = passwordHelper.createPasswordHash(id, user.password);

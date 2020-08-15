@@ -31,6 +31,11 @@
     CREATED_AT: 'created_at',
     UPDATED_AT: 'updated_at',
   };
+
+  const ACCESS_LEVELS = {
+    user: "author",
+    admin: "admin"
+  };
   
   const DOCUMENT_COLLECTIONS = {
     AUTHOR: 'Authors',

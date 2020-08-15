@@ -10,44 +10,36 @@
       Public Functions
       ========================================================================== */
    
-   const checkPermission = (permissions) => {
+   const requireMinAccessLevel = (accessLevel) => {
      return async (req, res, next) => {
        try {
-         const { roleId } = req.user;
-   
-         if (!organizationId || !roleId) {
-           return res
-             .status(httpStatus.UNAUTHORIZED)
-             .json(
-               responseHelper.UNAUTHORIZED(RESPONSE_MESSAGES.UNAUTHORIZED_REQUEST)
-             );
-         }
-   
-         // Check if Role exists
-         const role = await roleService.getRoleById(organizationId, roleId);
+         const { role } = req.user;
    
          if (!role) {
            return res
-             .status(httpStatus.BAD_REQUEST)
-             .json(responseHelper.BAD_REQUEST());
-         }
-   
-         // Check if User is permitted 
-         if (
-           role.permissions &&
-           permissions.every(permission => {
-             const p = permission.split('.');
-             return role.permissions[p[0]][p[1]];
-           })
-         ) {
-           next();
-         } else {
-           return res
              .status(httpStatus.UNAUTHORIZED)
              .json(
                responseHelper.UNAUTHORIZED(RESPONSE_MESSAGES.UNAUTHORIZED_REQUEST)
              );
          }
+      
+         if (accessLevel == ACCESS_LEVELS.admin) {
+          if (role == accessLevel) {
+            console.log("Hey admin! ✅")
+            next();
+          } else {
+            console.log("This route is only for admins! 😩")
+            return res
+            .status(httpStatus.UNAUTHORIZED)
+            .json(
+              responseHelper.UNAUTHORIZED(RESPONSE_MESSAGES.UNAUTHORIZED_REQUEST)
+            );
+          }
+        } else {
+          console.log("Hello authenticated user! ✅")
+          next();
+        }
+          
        } catch (error) {
          return res
            .status(httpStatus.INTERNAL_SERVER_ERROR)
@@ -60,5 +52,5 @@
       Exports
       ========================================================================== */
    
-   module.exports = checkPermission;
+   module.exports = requireMinAccessLevel;
    

@@ -3,7 +3,7 @@
    ========================================================================== */
 
    const userController = require('../../controllers/userController');
-   const checkPermission = require('../middlewares/permission');
+   const permission = require('../middlewares/permission');
    
    /* ==========================================================================
        Exports
@@ -12,28 +12,18 @@
    module.exports = (router) => {
      router.get(
        '/:orgId/user/all',
-       checkPermission(['settings.read']),
+       permission('admin'),
        userController.getAllUsers
      );
      router.put(
        '/:orgId/user/update',
-       checkPermission(['settings.write']),
+       permission('user'),
        userController.updateUser
      );
      router.put(
        '/:orgId/user/password/change',
-       checkPermission(['settings.write']),
+       permission('user'),
        userController.changeUserPassword
-     );
-     router.post(
-       '/:orgId/user/avatar',
-       checkPermission(['settings.write']),
-       userController.changeUserAvatar
-     );
-     router.get(
-       '/:orgId/user/avatar',
-       checkPermission(['settings.read']),
-       userController.getUserAvatar
      );
    };
    

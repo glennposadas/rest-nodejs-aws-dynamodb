@@ -45,7 +45,7 @@
     "node-cache": "^5.1.2",
     "rand-token": "^1.0.1",
     "swagger-ui-express": "^4.1.4",
-    "uuidv4": "^6.2.2"
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",

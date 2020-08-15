@@ -2,7 +2,7 @@
    Dependencies
    ========================================================================== */
 
-   const { uuid } = require('uuidv4');
+   const { v4: uuidv4 } = require('uuid');
    const moment = require('moment');
    const dynamoService = require('./dynamoService');
    const constants = require('../constants');
@@ -77,7 +77,7 @@
          };
        }
    
-       const id = uuid.v4();
+       const id = uuidv4();
    
        user.id = id;
    

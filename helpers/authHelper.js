@@ -4,7 +4,7 @@
 
    const moment = require('moment');
    const jwt = require('jsonwebtoken');
-   const { uuid } = require('uuidv4');
+   const { v4: uuidv4 } = require('uuid');
    const dynamoService = require('../services/dynamoService');
    
    /* ==========================================================================
@@ -36,7 +36,7 @@
    
    const getRefreshToken = async (payload, tokenId = null) => {
      try {
-       const id = tokenId || uuid.v4();
+       const id = tokenId || uuidv4();
        const token = jwt.sign(
          {
            ...payload,

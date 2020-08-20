@@ -170,21 +170,26 @@
      tableName,
      indexName,
      conditionExpression,
-     expressionAttributes
+     expressionAttributeNames,
+     expressionAttributeValues
    ) => {
      const params = {
        TableName: tableName,
        IndexName: indexName,
        KeyConditionExpression: conditionExpression,
-       ExpressionAttributeValues: expressionAttributes
+       ExpressionAttributeNames: expressionAttributeNames,
+       ExpressionAttributeValues: expressionAttributeValues
      };
    
+     console.log('dynamoService queryWithIndex: params-->', JSON.stringify(params));
+
      try {
        const result = await dynamo.query(params).promise();
    
        return result.Items;
      } catch (error) {
-       throw new Error('[Dynamo Service] queryWithIndex error.');
+       console.log('dynamoService queryWithIndex error: ', error);
+       throw new Error('[Dynamo Service] queryWithIndex error.', error);
      }
    };
    

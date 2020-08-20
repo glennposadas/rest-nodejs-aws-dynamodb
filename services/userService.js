@@ -33,7 +33,9 @@
      try {
        let userItems = await dynamoService.queryWithIndex(
          process.env.AUTHORS_TABLE,
-         'email-index'
+         'email-index',
+         'role = :role',
+         {'role': 'author'}
        );
 
        return userItems;

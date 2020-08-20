@@ -13,17 +13,21 @@
    
    const decodeToken = (token, secret) =>
      new Promise((resolve) => {
+       console.log('authHelper: token: ' + token + ' and secret: ' + secret);
        jwt.verify(token, secret, (err, decoded) => {
          if (err) {
+           console.log('authHelper jwt verify: ' + err);
            return resolve(null);
          }
    
+         console.log('authHelper jwt verify: success!');
          resolve(decoded);
        });
      });
    
    const getAccessToken = (payload) => {
      try {
+       console.log('authHelper getAccessToken')
        const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
          expiresIn: process.env.ACCESS_TOKEN_TTL
        });

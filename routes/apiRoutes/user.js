@@ -9,8 +9,13 @@
        Exports
        ========================================================================== */
    
-   module.exports = (router) => {
-     console.log('User.js ' + router);
+   module.exports = router => {
+     //console.log('User.js ' + router);
+     // const express = require("express")
+     // app <--- express()
+     // router <--- express.Router()
+     // app.use("/fafafa", router)
+
      router.get(
        '/user/all',
        userController.getAllUsers

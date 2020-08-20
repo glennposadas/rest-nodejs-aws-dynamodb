@@ -25,20 +25,17 @@
    router.post('/refresh/token', authController.refreshToken);
 
    router.post('/user/create', userController.createUser);
-
    
    /* ==========================================================================
       Secured API Endpoints
       ========================================================================== */
    
    require('./docs')(router);
-   
+
    router.use(authMiddleware);
-   
+
    fg.sync('./routes/apiRoutes/*.js', { dot: true }).forEach((file) => {
-      const resolvedFile = path.resolve(file);
-      console.log('Using route: ' + resolvedFile);
-     require(resolvedFile)(router);
+      require(path.resolve(file))(router);
    });
    
    /* ==========================================================================

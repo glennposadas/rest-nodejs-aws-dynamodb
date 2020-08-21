@@ -167,31 +167,26 @@
    };
    
    const queryWithIndex = async (
-     tableName,
-     indexName,
-     conditionExpression,
-     expressionAttributeNames,
-     expressionAttributeValues
-   ) => {
-    var params = {
-      KeyConditionExpression: 'role = :role',
-      ExpressionAttributeValues: {
-          ':role': {'S': 'author'}
-      },
-      TableName: tableName
-  }
-   
-     console.log('dynamoService queryWithIndex: params-->', JSON.stringify(params));
-
-     try {
-       const result = await dynamo.query(params).promise();
-   
-       return result.Items;
-     } catch (error) {
-       console.log('dynamoService queryWithIndex error: ', error);
-       throw new Error('[Dynamo Service] queryWithIndex error.', error);
-     }
-   };
+    tableName,
+    indexName,
+    conditionExpression,
+    expressionAttributes
+  ) => {
+    const params = {
+      TableName: tableName,
+      IndexName: indexName,
+      KeyConditionExpression: conditionExpression,
+      ExpressionAttributeValues: expressionAttributes
+    };
+  
+    try {
+      const result = await dynamo.query(params).promise();
+  
+      return result.Items;
+    } catch (error) {
+      throw new Error('[Dynamo Service] queryWithIndex error.');
+    }
+  };
    
    /* ==========================================================================
       Exports

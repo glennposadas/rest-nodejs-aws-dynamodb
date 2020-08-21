@@ -14,9 +14,9 @@
      return async (req, res, next) => {
        console.log('require min access level...');
        try {
-         const { role } = req.user;
+         const roleType = req.user.role_type;
    
-         if (!role) {
+         if (!roleType) {
            return res
              .status(httpStatus.UNAUTHORIZED)
              .json(
@@ -25,7 +25,7 @@
          }
       
          if (accessLevel == ACCESS_LEVELS.admin) {
-          if (role == accessLevel) {
+          if (roleType == accessLevel) {
             console.log("Hey admin! ✅")
             next();
           } else {

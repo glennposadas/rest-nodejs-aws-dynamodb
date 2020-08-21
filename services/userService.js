@@ -31,15 +31,14 @@
    
    const getAllUsers = async () => {
      try {
-       let userItems = await dynamoService.queryWithIndex(
-         process.env.AUTHORS_TABLE,
-         'email-index',
-         'role = :role',
-         {'role': 'author'},
-         ''
-       );
+      const userByEmail = await dynamoService.getItemByParams(
+        process.env.AUTHORS_TABLE,
+        'role-index',
+        'role_type = :role_type',
+        { ':role_type': 'author' }
+      );
 
-       return userItems;
+      return userByEmail
      } catch (err) {
        console.log('User Service getAllUsers error: ' + err);
        throw new Error(err.message);
@@ -71,7 +70,7 @@
        }
    
        const id = uuidv4();
-       user.role = "author";
+       user.role_type = "author";
        user.id = id;
 
    

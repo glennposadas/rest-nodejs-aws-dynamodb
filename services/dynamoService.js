@@ -11,10 +11,10 @@
       ========================================================================== */
    
    aws.config.update({
-     region: process.env.REGION,
-     endpoint: "http://localhost:8000"
-    //  accessKeyId: process.env.ACCESS_KEY,
-    //  secretAccessKey: process.env.SECRET_KEY
+      region: process.env.REGION,
+      endpoint: "http://localhost:8000",
+      accessKeyId: process.env.ACCESS_KEY,
+      secretAccessKey: process.env.SECRET_KEY
    });
 
    /* ==========================================================================
@@ -45,7 +45,7 @@
      }
    };
    
-   const updateTableItem = async (tableName, id, item) => {
+   const updateTableItem = async (tableName, id, item) => { 
      try {
        let updateExpression = 'set ';
        const expressionAttributeNames = {};
@@ -173,13 +173,13 @@
      expressionAttributeNames,
      expressionAttributeValues
    ) => {
-     const params = {
-       TableName: tableName,
-       IndexName: indexName,
-       KeyConditionExpression: conditionExpression,
-       ExpressionAttributeNames: expressionAttributeNames,
-       ExpressionAttributeValues: expressionAttributeValues
-     };
+    var params = {
+      KeyConditionExpression: 'role = :role',
+      ExpressionAttributeValues: {
+          ':role': {'S': 'author'}
+      },
+      TableName: tableName
+  }
    
      console.log('dynamoService queryWithIndex: params-->', JSON.stringify(params));
 

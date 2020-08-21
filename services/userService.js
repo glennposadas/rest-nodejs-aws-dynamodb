@@ -35,7 +35,8 @@
          process.env.AUTHORS_TABLE,
          'email-index',
          'role = :role',
-         {'role': 'author'}
+         {'role': 'author'},
+         ''
        );
 
        return userItems;

@@ -12,43 +12,34 @@
       Private Functions
       ========================================================================== */
    
-   const getUserByEmail = async (email) => {
-     const userByEmail = await dynamoService.getItemByParams(
-       process.env.AUTHORS_TABLE,
-       'email-index',
-       'email = :email',
-       { ':email': email }
-     );
-   
-     return userByEmail;
-   };
-   
+
    /* ==========================================================================
       Public Functions
       ========================================================================== */
    
    const getAllNotes = async () => {
      try {
-       let notes = await dynamoService.queryWithIndex(
-         process.env.NOTES_TABLE,
-         'title-index'
-       );
-   
-       const promises = [];
-   
-       for (const user of notes) {
-         promises.push(aggregateUser(user));
+       // This service function is only for admins.
+       if (currentUser.role_type == 'author') {
+         throw new Error('This endpoint is for admin only!')
+         return;
        }
-   
-       userItems = await Promise.all(promises);
-   
-       return userItems;
+
+       const authors = await dynamoService.queryWithIndex(
+         process.env.AUTHORS_TABLE,
+         'active-index',
+         'isActive = :isActive',
+         { ':isActive': 1 }
+       );
+
+       return authors;
      } catch (err) {
+       console.log('Note service get all notes error: ' + err);
        throw new Error(err.message);
      }
    };
    
-   const getUserById = async (userId) => {
+   const getNoteById = async (userId) => {
      try {
        let user = await dynamoService.getItemById(process.env.AUTHORS_TABLE, userId);
    
@@ -60,7 +51,7 @@
      }
    };
    
-   const createUser = async (user) => {
+   const createNote = async (note) => {
      try {
        const email = user.email;
    
@@ -97,7 +88,7 @@
      }
    };
    
-   const updateUser = async (id, userToUpdate) => {
+   const updateNote = async (id, userToUpdate) => {
      try {
        const responseMsg = await dynamoService.updateTableItem(
          process.env.AUTHORS_TABLE,
@@ -113,56 +104,14 @@
        throw new Error(err.message);
      }
    };
-   
-   const changeUserPassword = async (userId, passwordValues) => {
-     try {
-       const { oldPassword, newPassword } = passwordValues;
-   
-       const user = await getUserById(userId);
-   
-       if (!user) {
-         return {
-           errorMsg: 'User does not exist'
-         };
-       }
-   
-       const passwordChallenge = passwordHelper.createPasswordHash(
-         userId,
-         oldPassword
-       );
-   
-       if (passwordChallenge !== user.password) {
-         return {
-           errorMsg: 'Incorrect old password'
-         };
-       }
-   
-       const passwordUpdate = passwordHelper.createPasswordHash(
-         userId,
-         newPassword
-       );
-   
-       await dynamoService.updateTableItem(process.env.AUTHORS_TABLE, userId, {
-         password: passwordUpdate
-       });
-   
-       return {
-         responseMsg: 'Password successfully updated!'
-       };
-     } catch (err) {
-       throw new Error(err.message);
-     }
-   };
-   
+
    /* ==========================================================================
        Exports
        ========================================================================== */
    
    module.exports = {
-     getUserByEmail,
-     getUserById,
-     createUser,
-     updateUser,
-     changeUserPassword
+     getNoteById,
+     createNote,
+     updateNote
    };
    

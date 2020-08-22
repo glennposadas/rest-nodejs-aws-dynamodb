@@ -38,8 +38,24 @@
        throw new Error(err.message);
      }
    };
+
+   const getNotesByUserId = async (userId) => {
+     try {
+       const notes = await dynamoService.queryWithIndex(
+         process.env.AUTHORS_TABLE,
+         'active-index',
+         'isActive = :isActive',
+         { ':isActive': 1 }
+       );
+
+       return notes;
+     } catch (err) {
+       console.log('Note service get all notes error: ' + err);
+       throw new Error(err.message);
+     }
+   }
    
-   const getNoteById = async (userId) => {
+   const getNoteById = async (noteId) => {
      try {
        let user = await dynamoService.getItemById(process.env.AUTHORS_TABLE, userId);
    

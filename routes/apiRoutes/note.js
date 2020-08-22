@@ -2,8 +2,8 @@
    Dependencies
    ========================================================================== */
 
-   const userController = require('../../controllers/userController');
-  //  const permission = require('../middlewares/permission');
+   const userController = require('../../controllers/notesController');
+   //const permission = require('../middlewares/permission');
    
    /* ==========================================================================
        Exports

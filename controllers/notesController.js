@@ -161,7 +161,7 @@
       ========================================================================== */
    
    module.exports = {
-     getAllUsers,
+     getAllNotes,
      createUser,
      updateUser,
      changeUserPassword

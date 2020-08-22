@@ -33,8 +33,8 @@
   };
 
   const ACCESS_LEVELS = {
-    user: "author",
-    admin: "admin"
+    author: 'author',
+    admin: 'admin'
   };
   
   const DOCUMENT_COLLECTIONS = {
@@ -70,6 +70,7 @@
     RESPONSE_MESSAGES,
     USER_FIELDS,
     NOTE_FIELDS,
+    ACCESS_LEVELS,
     DOCUMENT_COLLECTIONS
   };
   

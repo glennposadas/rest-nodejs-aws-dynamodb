@@ -29,14 +29,8 @@
       Public Functions
       ========================================================================== */
    
-   const getAllUsers = async (currentUser) => {
+   const getAllUsers = async () => {
      try {
-       // This service function is only for admins.
-      if (currentUser.role_type == 'author') {
-        throw new Error('This endpoint is for admin only!')
-        return;
-      }
-
       const authors = await dynamoService.queryWithIndex(
         process.env.AUTHORS_TABLE,
         'role-index',

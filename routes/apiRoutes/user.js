@@ -3,31 +3,26 @@
    ========================================================================== */
 
    const userController = require('../../controllers/userController');
-  //  const permission = require('../middlewares/permission');
+   const permission = require('../middlewares/permission');
    
    /* ==========================================================================
        Exports
        ========================================================================== */
    
    module.exports = router => {
-     //console.log('User.js ' + router);
-     // const express = require("express")
-     // app <--- express()
-     // router <--- express.Router()
-     // app.use("/fafafa", router)
-
      router.get(
        '/user/all',
+       permission('admin'),
        userController.getAllUsers
      );
      router.put(
        '/user/update',
-      //  permission('user'),
+       permission('author'),
        userController.updateUser
      );
      router.put(
        '/user/password/change',
-      //  permission('user'),
+       permission('author'),
        userController.changeUserPassword
      );
    };

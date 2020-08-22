@@ -14,15 +14,17 @@
       ========================================================================== */
    
    const getAllUsers = async (req, res) => {
-     console.log('UserController: getAllUsers');
+     console.log('UserController: getAllUsers, ', req.user);
      try {
-       const users = await userService.getAllUsers();
+       const currentUser = req.user;
+       const users = await userService.getAllUsers(currentUser);
    
        return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
      } catch (err) {
+       console.log('User controller error getAllUsers', err);
        return res
          .status(httpStatus.INTERNAL_SERVER_ERROR)
-         .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
+         .json({error:err.message});
      }
    };
    

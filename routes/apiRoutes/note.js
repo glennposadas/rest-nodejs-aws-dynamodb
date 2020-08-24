@@ -16,19 +16,29 @@
        notesController.getAllNotes
      );
      router.get(
-      '/notes',
+      '/notes/mine',
       permission('author'),
-      notesController.getNoteById
+      notesController.getMyNotes
     );
-     router.put(
-       '/user/update',
+     router.get(
+      '/notes/:noteId',
+      permission('author'),
+      notesController.getSpecificNote
+    );
+     router.post(
+       '/notes/new',
        permission('author'),
-       notesController.updateNotes
+       notesController.createNote
      );
      router.put(
-       '/user/password/change',
-       permission('author'),
-       notesController.changeUserPassword
-     );
+      '/notes/:noteId',
+      permission('author'),
+      notesController.updateNote
+    );
+    router.delete(
+      '/notes/:noteId',
+      permission('author'),
+      notesController.deleteNote
+    );
    };
    

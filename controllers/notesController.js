@@ -188,8 +188,10 @@
    
    module.exports = {
      getAllNotes,
-     createUser,
-     updateUser,
-     changeUserPassword
+     getMyNotes,
+     getSpecificNote,
+     createNote,
+     updateNote,
+     deleteNote
    };
    

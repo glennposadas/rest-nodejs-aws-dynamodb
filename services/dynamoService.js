@@ -184,6 +184,7 @@
   
       return result.Items;
     } catch (error) {
+      console.log('Dynamo Service: [Dynamo Service] queryWithIndex error. Params: ' + params + ' and error: ' + error);
       throw new Error('[Dynamo Service] queryWithIndex error.');
     }
   };

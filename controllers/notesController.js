@@ -14,9 +14,9 @@
    
    const getAllNotes = async (req, res) => {
      try {
-       const users = await notesService.getAllNotes();
+       const notes = await notesService.getAllNotes();
    
-       return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
+       return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, notes));
      } catch (err) {
        return res
          .status(httpStatus.INTERNAL_SERVER_ERROR)
@@ -26,10 +26,10 @@
 
    const getMyNotes = async (req, res) => {
     try {
-      const currentUser = req.user;
-      const users = await notesService.getAllNotes();
+      const userId = req.user.id;
+      const notes = await notesService.getMyNotes(userId);
   
-      return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
+      return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, notes));
     } catch (err) {
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR)

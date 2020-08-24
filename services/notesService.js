@@ -19,14 +19,8 @@
    
    const getAllNotes = async () => {
      try {
-       // This service function is only for admins.
-       if (currentUser.role_type == 'author') {
-         throw new Error('This endpoint is for admin only!')
-         return;
-       }
-
        const authors = await dynamoService.queryWithIndex(
-         process.env.AUTHORS_TABLE,
+         process.env.NOTES_TABLE,
          'active-index',
          'isActive = :isActive',
          { ':isActive': 1 }
@@ -39,7 +33,24 @@
      }
    };
 
-   const getNotesByUserId = async (userId) => {
+const getMyNotes = async () => {
+  try {
+
+    const authors = await dynamoService.queryWithIndex(
+      process.env.AUTHORS_TABLE,
+      'active-index',
+      'isActive = :isActive',
+      { ':isActive': 1 }
+    );
+
+    return authors;
+  } catch (err) {
+    console.log('Note service get all notes error: ' + err);
+    throw new Error(err.message);
+  }
+};
+
+   const getSpecificNote = async (userId) => {
      try {
        const notes = await dynamoService.queryWithIndex(
          process.env.AUTHORS_TABLE,
@@ -126,7 +137,9 @@
        ========================================================================== */
    
    module.exports = {
-     getNoteById,
+     getAllNotes,
+     getMyNotes,
+     getSpecificNote,     
      createNote,
      updateNote
    };

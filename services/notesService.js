@@ -35,30 +35,34 @@
 
 const getMyNotes = async (currentUserId) => {
   try {
-    const authors = await dynamoService.queryWithIndex(
-      'Notes1',
+    const notes = await dynamoService.queryWithIndex(
+      process.env.NOTES_TABLE,
       'user_id-index',
       'user_id = :b and isActive = :a',
-      { 
+      {
         ':a': 1,
-        ':b': currentUserId 
+        ':b': currentUserId
       }
     );
 
-    return authors;
+    return notes;
   } catch (err) {
     console.log('Note service get all notes error: ' + err);
     throw new Error(err.message);
   }
 };
 
-   const getSpecificNote = async (userId) => {
+   const getSpecificNote = async (currentUserId, noteId) => {
      try {
-       const notes = await dynamoService.queryWithIndex(
-         process.env.AUTHORS_TABLE,
-         'active-index',
-         'isActive = :isActive',
-         { ':isActive': 1 }
+       console.log('get specific note: ', noteId);
+       const notes = await dynamoService.getItemByParams(
+         process.env.NOTES_TABLE,
+         'noteuser_id-index',
+         'user_id = :b and id = :c',
+         {
+           ':c': noteId,
+           ':b': currentUserId
+         }
        );
 
        return notes;
@@ -145,4 +149,3 @@ const getMyNotes = async (currentUserId) => {
      createNote,
      updateNote
    };
-   

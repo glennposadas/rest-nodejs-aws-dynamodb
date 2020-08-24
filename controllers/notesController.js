@@ -39,10 +39,11 @@
 
   const getSpecificNote = async (req, res) => {
     try {
-      const currentUser = req.user;
-      const users = await notesService.getAllNotes();
+      const userId = req.user.id;
+      const { noteId } = req.params;
+      const note = await notesService.getSpecificNote(userId, noteId);
   
-      return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
+      return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, note));
     } catch (err) {
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR)

@@ -36,10 +36,13 @@
 const getMyNotes = async (currentUserId) => {
   try {
     const authors = await dynamoService.queryWithIndex(
-      process.env.NOTES_TABLE,
-      'active-index',
-      'isActive = :isActive and user_id = :user_id',
-      { ':isActive': 1, ':user_id': currentUserId }
+      'Notes1',
+      'user_id-index',
+      'user_id = :b and isActive = :a',
+      { 
+        ':a': 1,
+        ':b': currentUserId 
+      }
     );
 
     return authors;

@@ -77,7 +77,7 @@
        // Hash password
        user.password = passwordHelper.createPasswordHash(id, user.password);
    
-       console.log('UserService: createUser to table ' + process.env.AUTHORS_TABLE + ' with user object: ' + JSON.stringify)
+       console.log('UserService: createUser to table ' + process.env.AUTHORS_TABLE + ' with user object: ' + JSON.stringify(user))
 
        const responseMsg = await dynamoService.addTableItem(
          process.env.AUTHORS_TABLE,

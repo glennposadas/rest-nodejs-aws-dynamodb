@@ -54,6 +54,8 @@
        let index = 0;
        const itemEntries = Object.entries(item);
        const itemLength = itemEntries.length;
+
+       console.log('dynamoService: itemEntries: ', item);
    
        for (const [key, value] of itemEntries) {
          updateExpression += `#${key}Field = :${key}Param${

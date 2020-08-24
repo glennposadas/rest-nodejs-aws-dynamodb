@@ -93,6 +93,8 @@
        }
    
        const { id, ...rest } = req.body;
+
+       console.log('userController updateUser: ', user);
    
        const { errorMsg, responseMsg } = await userService.updateUser(
          req.user.id,

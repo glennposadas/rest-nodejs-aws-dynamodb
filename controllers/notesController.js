@@ -101,14 +101,14 @@
    
    const updateNote = async (req, res) => {
      try {
-       const user = { ...req.body, ...req.params };
+       const note = { ...req.body, ...req.params };
    
        const schema = joi.object({
-         name: joi.string().min(2).max(50),
-         email: joi.string().email()
+         title: joi.string().min(2).max(50),
+         content: joi.string()
        });
    
-       const { error } = schema.validate(user);
+       const { error } = schema.validate(note);
    
        if (error && error.details) {
          return res
@@ -117,8 +117,10 @@
        }
    
        const { id, ...rest } = req.body;
+
+       console.log('notesController: updateNote req.body: ', JSON.stringify(req.body));
    
-       const { errorMsg, responseMsg } = await userService.updateUser(
+       const { errorMsg, responseMsg } = await notesService.updateNote(
          req.user.id,
          rest
        );

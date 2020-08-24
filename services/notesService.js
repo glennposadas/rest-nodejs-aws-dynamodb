@@ -33,24 +33,24 @@
      }
    };
 
-const getMyNotes = async (currentUserId) => {
-  try {
-    const notes = await dynamoService.queryWithIndex(
-      process.env.NOTES_TABLE,
-      'user_id-index',
-      'user_id = :b and isActive = :a',
-      {
-        ':a': 1,
-        ':b': currentUserId
-      }
-    );
+  const getMyNotes = async (currentUserId) => {
+    try {
+      const notes = await dynamoService.queryWithIndex(
+        process.env.NOTES_TABLE,
+        'user_id-index',
+        'user_id = :b and isActive = :a',
+        {
+          ':a': 1,
+          ':b': currentUserId
+        }
+      );
 
-    return notes;
-  } catch (err) {
-    console.log('Note service get all notes error: ' + err);
-    throw new Error(err.message);
-  }
-};
+      return notes;
+    } catch (err) {
+      console.log('Note service get all notes error: ' + err);
+      throw new Error(err.message);
+    }
+  };
 
    const getSpecificNote = async (currentUserId, noteId) => {
      try {
@@ -71,18 +71,6 @@ const getMyNotes = async (currentUserId) => {
        throw new Error(err.message);
      }
    }
-   
-   const getNoteById = async (noteId) => {
-     try {
-       let user = await dynamoService.getItemById(process.env.AUTHORS_TABLE, userId);
-   
-       user = await aggregateUser(user);
-   
-       return user;
-     } catch (err) {
-       throw new Error(err.message);
-     }
-   };
    
    const createNote = async (note) => {
      try {
@@ -105,8 +93,6 @@ const getMyNotes = async (currentUserId) => {
        // Hash password
        user.password = passwordHelper.createPasswordHash(id, user.password);
    
-       console.log('UserService: createUser to table ' + process.env.AUTHORS_TABLE + ' with user object: ' + JSON.stringify)
-
        const responseMsg = await dynamoService.addTableItem(
          process.env.AUTHORS_TABLE,
          user
@@ -121,12 +107,12 @@ const getMyNotes = async (currentUserId) => {
      }
    };
    
-   const updateNote = async (id, userToUpdate) => {
+   const updateNote = async (id, noteToBeUpdated) => {
      try {
        const responseMsg = await dynamoService.updateTableItem(
-         process.env.AUTHORS_TABLE,
+         process.env.NOTES_TABLE,
          id,
-         userToUpdate
+         noteToBeUpdated
        );
    
        return {

@@ -16,7 +16,6 @@
    const getAllUsers = async (req, res) => {
      console.log('UserController: getAllUsers, ', req.user);
      try {
-       const currentUser = req.user;
        const users = await userService.getAllUsers();
    
        return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));

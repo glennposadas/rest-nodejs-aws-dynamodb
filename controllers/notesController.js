@@ -23,8 +23,34 @@
          .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
      }
    };
+
+   const getMyNotes = async (req, res) => {
+    try {
+      const currentUser = req.user;
+      const users = await notesService.getAllNotes();
+  
+      return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
+    } catch (err) {
+      return res
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
+        .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
+    }
+  };
+
+  const getSpecificNote = async (req, res) => {
+    try {
+      const currentUser = req.user;
+      const users = await notesService.getAllNotes();
+  
+      return res.status(httpStatus.OK).json(responseHelper.SUCCESS(null, users));
+    } catch (err) {
+      return res
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
+        .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
+    }
+  };
    
-   const createUser = async (req, res) => {
+   const createNote = async (req, res) => {
      console.log("createUser controller...")
      try {
        const { body } = req;
@@ -72,7 +98,7 @@
      }
    };
    
-   const updateUser = async (req, res) => {
+   const updateNote = async (req, res) => {
      try {
        const user = { ...req.body, ...req.params };
    
@@ -112,7 +138,7 @@
      }
    };
    
-   const changeUserPassword = async (req, res) => {
+   const deleteNote = async (req, res) => {
      try {
        const { body } = req;
    

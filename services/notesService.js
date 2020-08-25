@@ -74,35 +74,20 @@
    
    const createNote = async (note) => {
      try {
-       const email = user.email;
-   
-       const [existingUser] = await Promise.all([
-         getUserByEmail(email)
-       ]);
-   
-       if (existingUser) {
-         return {
-           errorMsg: constants.RESPONSE_MESSAGES.EXISTING_PARAMETER(email)
-         };
-       }
-   
        const id = uuidv4();
    
-       user.id = id;
-   
-       // Hash password
-       user.password = passwordHelper.createPasswordHash(id, user.password);
-   
+       note.id = id;
+
        const responseMsg = await dynamoService.addTableItem(
-         process.env.AUTHORS_TABLE,
-         user
+         process.env.NOTES_TABLE,
+         note
        );
    
        return {
          responseMsg
        };
      } catch (err) {
-       console.log('User service createUser error: ', err)
+       console.log('notesSfervice createNote error: ', err)
        throw new Error(err.message);
      }
    };

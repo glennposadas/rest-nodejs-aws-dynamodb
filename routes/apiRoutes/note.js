@@ -31,12 +31,12 @@
        notesController.createNote
      );
      router.put(
-      '/notes/:noteId',
+      '/notes/update',
       permission('author'),
       notesController.updateNote
     );
     router.delete(
-      '/notes/:noteId',
+      '/notes/delete',
       permission('author'),
       notesController.deleteNote
     );

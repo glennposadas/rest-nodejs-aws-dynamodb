@@ -52,39 +52,32 @@
   };
    
    const createNote = async (req, res) => {
-     console.log("createUser controller...")
+     console.log("createNote controller...")
      try {
        const { body } = req;
    
        const schema = joi.object({
-         name: joi.string().required().min(2).max(50),
-         email: joi.string().required().email(),
-         password: joi.string().required().min(8).max(30),
-         confirmPassword: joi
-           .string()
-           .required()
-           .equal(joi.ref('password'))
-           .messages({
-             'any.only': 'Password does not match'
-           })
+         title: joi.string().required().min(2).max(50),
+         content: joi.string().required()
        });
    
        const { error } = schema.validate(body);
    
        if (error) {
-         console.log("Error create user controller ", error)
+         console.log("Error create notes controller ", error)
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(error.details[0].message));
        }
    
-       // Remove unnecessary password field
-       delete body.confirmPassword;
-   
-       const { errorMsg, responseMsg } = await userService.createUser(req.body);
+       const newNote = body;
+       newNote.user_id = req.user.id;
+       newNote.isActive = 1;
+       
+       const { errorMsg, responseMsg } = await notesService.createNote(body);
    
        if (errorMsg) {
-         console.log("Error create user controller message: ", errorMsg)
+         console.log("Error create notes controller message: ", errorMsg)
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(errorMsg));
@@ -92,7 +85,7 @@
    
        return res.status(httpStatus.OK).json(responseHelper.SUCCESS(responseMsg));
      } catch (err) {
-       console.log("Error create user controller catched: ", err)
+       console.log("Error create notes controller catched: ", err)
        return res
          .status(httpStatus.INTERNAL_SERVER_ERROR)
          .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
@@ -100,10 +93,12 @@
    };
    
    const updateNote = async (req, res) => {
+    console.log('notesController: updateNote');
      try {
        const note = { ...req.body, ...req.params };
    
        const schema = joi.object({
+         id: joi.string().required(),
          title: joi.string().min(2).max(50),
          content: joi.string()
        });
@@ -111,6 +106,7 @@
        const { error } = schema.validate(note);
    
        if (error && error.details) {
+        console.log('notesController: updateNote error1: ', error);
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(error.details[0].message));
@@ -118,14 +114,15 @@
    
        const { id, ...rest } = req.body;
 
-       console.log('notesController: updateNote req.body: ', JSON.stringify(req.body));
+       console.log('notesController: updateNote req.body: ', JSON.stringify(rest));
    
        const { errorMsg, responseMsg } = await notesService.updateNote(
-         req.user.id,
+         note.id,
          rest
        );
    
        if (errorMsg) {
+        console.log('notesController: updateNote errorMsg: ', errorMsg);
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(errorMsg));
@@ -135,50 +132,58 @@
          .status(httpStatus.OK)
          .json(responseHelper.SUCCESS(null, responseMsg));
      } catch (err) {
+      console.log('notesController: updateNote error: ', err);
        return res
          .status(httpStatus.INTERNAL_SERVER_ERROR)
          .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));
      }
    };
    
+   // Deleting a note object will just set the `isActive` to 0.
    const deleteNote = async (req, res) => {
+    console.log('notesController: updateNote');
      try {
-       const { body } = req;
+       const note = { ...req.body, ...req.params };
    
        const schema = joi.object({
-         oldPassword: joi.string().required().min(8).max(30),
-         newPassword: joi
-           .string()
-           .required()
-           .min(8)
-           .max(30)
-           .disallow(joi.ref('oldPassword'))
-           .messages({
-             'any.invalid': `New password shouldn't be the same as the old one`
-           })
+         id: joi.string().required(),
+         title: joi.string().min(2).max(50),
+         content: joi.string()
        });
    
-       const { error } = schema.validate(body);
+       const { error } = schema.validate(note);
    
-       if (error) {
+       if (error && error.details) {
+        console.log('notesController: updateNote error1: ', error);
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(error.details[0].message));
        }
    
-       const { errorMsg, responseMsg } = await userService.changeUserPassword(
-         req.user.id,
-         body
+       const { id, ...rest } = req.body;
+
+       // Set deleted.
+       rest.isActive = 0;
+
+       console.log('notesController: updateNote req.body: ', JSON.stringify(rest));
+   
+       const { errorMsg, responseMsg } = await notesService.updateNote(
+         note.id,
+         rest
        );
    
        if (errorMsg) {
+        console.log('notesController: updateNote errorMsg: ', errorMsg);
          return res
            .status(httpStatus.BAD_REQUEST)
            .json(responseHelper.BAD_REQUEST(errorMsg));
        }
    
-       return res.status(httpStatus.OK).json(responseHelper.SUCCESS(responseMsg));
+       return res
+         .status(httpStatus.OK)
+         .json(responseHelper.SUCCESS(null, 'Note ' + id + ' has been deleted!'));
      } catch (err) {
+      console.log('notesController: updateNote error: ', err);
        return res
          .status(httpStatus.INTERNAL_SERVER_ERROR)
          .json(responseHelper.SERVER_ERROR(RESPONSE_MESSAGES.SERVER_ERROR));

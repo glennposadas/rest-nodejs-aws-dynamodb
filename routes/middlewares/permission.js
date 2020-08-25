@@ -19,7 +19,6 @@
    
          console.log('permission: roletype: ', roleType);
          console.log('permission: accessLevel: ', accessLevel);
-         console.log('accessLevel: ', ACCESS_LEVELS.admin);
 
          if (!roleType) {
            return res
